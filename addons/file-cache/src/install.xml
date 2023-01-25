@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<insertfile>_inc/summary.txt</insertfile>
+-->
+
+<modification>
+	<name>!ocmod.space: <insertvar>MODCODE</insertvar></name>
+	<code><insertvar>MODFILE</insertvar></code>
+	<version><insertvar>MODVERS</insertvar></version>
+	<author><insertvar>AUTHOR</insertvar></author>
+	<link><insertvar>XMLLINK</insertvar></link>
+
+	<file path="system/library/cache/file.php">
+		<operation error="log">
+  			<search>
+				<![CDATA[public function __construct($expire = 3600)]]>
+			</search>
+			<add position="replace">
+				<![CDATA[public function __construct_old($expire = 3600)]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+  			<search>
+				<![CDATA[public function __construct_old($expire = 3600)]]>
+			</search>
+			<add position="before">
+				<![CDATA[		/// << Fix Cache
+	public function __construct(int $expire = 3600) {
+		$this->expire = $expire;
+
+		$files = glob(DIR_CACHE . 'cache.*');
+
+		if ($files) {
+			foreach ($files as $file) {
+				$filename = basename($file);
+
+				$time = substr(strrchr($file, '.'), 1);
+
+				if ($time < time()) {
+					$this->delete(substr($filename, 6, strrpos($filename, '.') - 6));
+				}
+			}
+		}
+	}
+	/// >> Fix Cache]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+  			<search>
+				<![CDATA[public function get($key)]]>
+			</search>
+			<add position="replace">
+				<![CDATA[public function old_get($key)]]>
+			</add>
+		</operation>
+		<operation error="log">
+  			<search>
+				<![CDATA[public function old_get($key)]]>
+			</search>
+			<add position="before">
+				<![CDATA[	/// << Fix Cache
+	public function get($key) {
+		$files = glob(DIR_CACHE . 'cache.' . basename($key) . '.*');
+
+		if ($files && is_file($files[0])) {
+			$handle = fopen($files[0], 'r');
+
+			flock($handle, LOCK_SH);
+
+			$size = filesize($files[0]);
+
+			if ($size > 0) {
+				$data = fread($handle, $size);
+			} else {
+				$data = '';
+			}
+
+			flock($handle, LOCK_UN);
+
+			fclose($handle);
+
+			return json_decode($data, true);
+		}
+
+		// return [];
+		return false;
+	}
+	/// >> Fix Cache]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+  			<search>
+				<![CDATA[public function delete($key)]]>
+			</search>
+			<add position="replace">
+				<![CDATA[public function delete_old($key)]]>
+			</add>
+		</operation>
+		<operation error="log">
+  			<search>
+				<![CDATA[public function delete_old($key)]]>
+			</search>
+			<add position="before">
+				<![CDATA[	/// << Fix Cache
+	public function delete($key) {
+		$files = glob(DIR_CACHE . 'cache.' . basename($key) . '.*');
+
+		if ($files) {
+			foreach ($files as $file) {
+				if (!@unlink($file)) {
+					clearstatcache(false, $file);
+				}
+			}
+		}
+	}
+	/// >> Fix Cache]]>
+			</add>
+		</operation>
+	</file>
+</modification>

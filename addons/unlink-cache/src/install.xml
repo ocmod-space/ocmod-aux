@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<insertfile>_inc/summary.txt</insertfile>
+-->
+
+<modification>
+	<name>!ocmod.space: <insertvar>MODCODE</insertvar></name>
+	<code><insertvar>MODFILE</insertvar></code>
+	<version><insertvar>MODVERS</insertvar></version>
+	<author><insertvar>AUTHOR</insertvar></author>
+	<link><insertvar>XMLLINK</insertvar></link>
+
+	<file path="admin/model/localisation/language.php">
+		<operation error="log">
+  			<search>
+				<![CDATA[$language_data = $this->cache->get('language');]]>
+			</search>
+			<add position="replace">
+				<![CDATA[$language_data = $this->cache->get('admin.language');]]>
+			</add>
+		</operation>
+	</file>
+	<file path="catalog/model/localisation/language.php">
+		<operation error="log">
+  			<search>
+				<![CDATA[$language_data = $this->cache->get('language');]]>
+			</search>
+			<add position="replace">
+				<![CDATA[$language_data = $this->cache->get('catalog.language');]]>
+			</add>
+		</operation>
+	</file>
+</modification>

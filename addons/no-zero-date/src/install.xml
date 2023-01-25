@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<insertfile>_inc/summary.txt</insertfile>
+-->
+
+<modification>
+	<name>!ocmod.space: <insertvar>MODCODE</insertvar></name>
+	<code><insertvar>MODFILE</insertvar></code>
+	<version><insertvar>MODVERS</insertvar></version>
+	<author><insertvar>AUTHOR</insertvar></author>
+	<link><insertvar>XMLLINK</insertvar></link>
+
+	<file path="system/library/db/mysqli.php" error="log">
+		<operation error="log">
+			<ignoreif regex="false" info="">
+        <![CDATA[NO_ZERO_IN_DATE,NO_ENGINE_SUBSTITUTION]]>
+      </ignoreif>
+			<search>
+				<![CDATA[NO_ZERO_DATE,]]>
+			</search>
+			<add position="replace">
+				<![CDATA[]]>
+			</add>
+		</operation>
+	</file>
+</modification>

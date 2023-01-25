@@ -1,0 +1,6 @@
+Issue:
+PHP Notice:  A non well formed numeric value encountered in system/library/cart/tax.php on line 113
+PHP Notice:  A non well formed numeric value encountered in system/library/cart/tax.php on line 71
+
+Reason:
+Extensions > Extensions > Order Totals > Handling Fee - have to disabled if is not used
