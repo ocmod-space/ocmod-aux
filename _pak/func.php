@@ -299,7 +299,7 @@ function delete_content($path) {
 function get_enumerated() {
     $enumerated = array();
 
-    if (is_dir(MDIR)) {
+    if (is_dir(MDIR) && is_dir(MDIR . '/src')) {
         $enumerated[] = strtolower(basename(getcwd()));
     } else {
         $enumerated[] = false;

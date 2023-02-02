@@ -1,6 +1,6 @@
 <?php
 
-// PAK - OpenCart Extension Packer v0.4.0
+// PAK - OpenCart Extension Packer v0.4.1
 
 require_once '_pak/conf.php';
 
