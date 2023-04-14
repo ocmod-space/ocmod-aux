@@ -13,101 +13,67 @@
 
 	<file path="system/library/cache/file.php">
 		<operation error="log">
-  			<search>
-				<![CDATA[public function __construct($expire = 3600)]]>
-			</search>
-			<add position="replace">
-				<![CDATA[public function __construct_old($expire = 3600)]]>
-			</add>
+			<search><![CDATA[private $expire;]]></search>
+			<add position="replace"><![CDATA[private int $expire;]]></add>
 		</operation>
 
 		<operation error="log">
-  			<search>
-				<![CDATA[public function __construct_old($expire = 3600)]]>
-			</search>
-			<add position="before">
-				<![CDATA[		/// << Fix Cache
+  			<search><![CDATA[public function __construct($expire = 3600)]]></search>
+			<add position="replace">
+				<![CDATA[/// << <insertvar>MODCODE</insertvar>
 	public function __construct(int $expire = 3600) {
 		$this->expire = $expire;
+	}
+	/// >> <insertvar>MODCODE</insertvar>
 
-		$files = glob(DIR_CACHE . 'cache.*');
+	public function __construct_old($expire = 3600)]]>
+			</add>
+		</operation>
+
+		<operation error="log">
+			<search><![CDATA[public function get($key)]]></search>
+			<add position="replace">
+				<![CDATA[/// << <insertvar>MODCODE</insertvar>
+	public function get(string $key) {
+		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
 
 		if ($files) {
-			foreach ($files as $file) {
-				$filename = basename($file);
-
-				$time = substr(strrchr($file, '.'), 1);
-
-				if ($time < time()) {
-					$this->delete(substr($filename, 6, strrpos($filename, '.') - 6));
-				}
-			}
+			return json_decode(file_get_contents($files[0]), true);
+		} else {
+			return [];
 		}
 	}
-	/// >> Fix Cache]]>
-			</add>
+	/// >> <insertvar>MODCODE</insertvar>
+
+	public function get_old($key)]]></add>
 		</operation>
 
 		<operation error="log">
-  			<search>
-				<![CDATA[public function get($key)]]>
+			<search>
+				<![CDATA[public function set($key, $value)]]>
 			</search>
 			<add position="replace">
-				<![CDATA[public function old_get($key)]]>
-			</add>
-		</operation>
-		<operation error="log">
-  			<search>
-				<![CDATA[public function old_get($key)]]>
-			</search>
-			<add position="before">
-				<![CDATA[	/// << Fix Cache
-	public function get($key) {
-		$files = glob(DIR_CACHE . 'cache.' . basename($key) . '.*');
+				<![CDATA[/// << <insertvar>MODCODE</insertvar>
+	public function set(string $key, $value, int $expire = 0) {
+		$this->delete($key);
 
-		if ($files && is_file($files[0])) {
-			$handle = fopen($files[0], 'r');
-
-			flock($handle, LOCK_SH);
-
-			$size = filesize($files[0]);
-
-			if ($size > 0) {
-				$data = fread($handle, $size);
-			} else {
-				$data = '';
-			}
-
-			flock($handle, LOCK_UN);
-
-			fclose($handle);
-
-			return json_decode($data, true);
+		if (!$expire) {
+			$expire = $this->expire;
 		}
 
-		// return [];
-		return false;
+		file_put_contents(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.' . (time() + $expire), json_encode($value));
 	}
-	/// >> Fix Cache]]>
-			</add>
+	/// >> <insertvar>MODCODE</insertvar>
+
+	public function set_old($key, $value)]]></add>
 		</operation>
 
 		<operation error="log">
-  			<search>
-				<![CDATA[public function delete($key)]]>
-			</search>
+			<search><![CDATA[public function delete($key)]]></search>
 			<add position="replace">
-				<![CDATA[public function delete_old($key)]]>
-			</add>
-		</operation>
-		<operation error="log">
-  			<search>
-				<![CDATA[public function delete_old($key)]]>
-			</search>
-			<add position="before">
-				<![CDATA[	/// << Fix Cache
-	public function delete($key) {
-		$files = glob(DIR_CACHE . 'cache.' . basename($key) . '.*');
+				<![CDATA[/// << <insertvar>MODCODE</insertvar>
+	public function delete(string $key) {
+		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
 
 		if ($files) {
 			foreach ($files as $file) {
@@ -117,8 +83,28 @@
 			}
 		}
 	}
-	/// >> Fix Cache]]>
-			</add>
+
+	/**
+	 * Destructor
+	 */
+	public function __destruct() {
+		$files = glob(DIR_CACHE . 'cache.*');
+
+		if ($files && rand(1, 100) == 1) {
+			foreach ($files as $file) {
+				$time = substr(strrchr($file, '.'), 1);
+
+				if ($time < time()) {
+					if (!@unlink($file)) {
+						clearstatcache(false, $file);
+					}
+				}
+			}
+		}
+	}
+	/// >> <insertvar>MODCODE</insertvar>
+
+	public function delete_old($key)]]></add>
 		</operation>
 	</file>
 </modification>
