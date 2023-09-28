@@ -2,9 +2,7 @@
 _fcl
 _pak
 zip
-.fclignore
 .gitignore
 .php-cs-fixer.php_cs
-.oc-fixes.code-workspace
 hideg.pwd
 pakrun.php

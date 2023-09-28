@@ -1,6 +1,6 @@
 <?php
 
-// PAK - OpenCart Extension Packer v0.4.1
+// PAK - OpenCart Extension Packer v0.4.4
 
 require_once '_pak/conf.php';
 
@@ -10,99 +10,100 @@ require_once '_pak/reqd.php';
 
 /*
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-    // error was suppressed with the @-operator
-    if (@error_reporting() === 0) {
-        return false;
-    }
+	// error was suppressed with the @-operator
+	if (@error_reporting() === 0) {
+		return false;
+	}
 
-    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 });
 */
 
 $clo = get_clo();
 $basename = strtolower(basename(getcwd()));
+if (isset($clo[MAKEZIP]) && $clo[MAKEZIP] !== false) {
+	require_once 'pakdef.php';
 
-if (isset($clo[MAKEZIP]) && !is_false($clo[MAKEZIP])) {
-    require_once 'pakdef.php';
+	$workdir = getWd($clo[MAKEZIP]);
 
-    $workdir = get_wd($clo[MAKEZIP]);
+	if ($workdir) {
+		$srcdir = getConcatPath($workdir, SRCDIR);
+		$zipdir = getConcatPath($workdir, ZIPDIR);
 
-    if ($workdir) {
-        $srcdir = strtopath(strtopath($workdir) . SRCDIR);
-        $zipdir = strtopath(strtopath($workdir) . ZIPDIR);
+		if (strpos($workdir, ADIR) === 0) {
+			$part = explode(DIRECTORY_SEPARATOR, $workdir);
+			$basename .= '--' . end($part);
 
-        if (strpos($workdir, strtopath(ADIR)) === 0) {
-            $basename .= str_replace(strtopath(ADIR), '--', $workdir);
-        }
+			unset($part);
+		}
 
-        define('MODFILE', $basename);
+		define('MODFILE', $basename);
 
-        $zipfile = $basename;
-        $zipfile = $zipdir . $zipfile . ZIPEXT;
+		$zipfile = getConcatPath($zipdir, $basename . ZIPEXT);
 
-        $mod_code = str_replace('--', '|', $basename);
+		$mod_code = str_replace('--', '|', $basename);
 
-        define('MODCODE', $mod_code);
+		define('MODCODE', $mod_code);
 
-        $mod_name = str_replace('|', ' ', $mod_code);
-        $mod_name = ucwords($mod_name);
-        $mod_name = str_replace(' ', '|', $mod_name);
-        $mod_name = str_replace('-', ' ', $mod_name);
-        $mod_name = ucwords($mod_name);
+		$mod_name = str_replace('|', ' ', $mod_code);
+		$mod_name = ucwords($mod_name);
+		$mod_name = str_replace(' ', '|', $mod_name);
+		$mod_name = str_replace('-', ' ', $mod_name);
+		$mod_name = ucwords($mod_name);
 
-        define('MODNAME', $mod_name);
+		define('MODNAME', $mod_name);
 
-        if (chkdir($srcdir) && chkdir($zipdir)) {
-            if (is_file($zipfile)) {
-                unlink($zipfile);
-            }
+		if (chkdir($srcdir) && chkdir($zipdir)) {
+			if (is_file($zipfile)) {
+				unlink($zipfile);
+			}
 
-            mkzip($srcdir, $zipfile, true);
-        } else {
-            error('Can not create dir: ' . $zipdir);
-        }
-    } else {
-        error('There is no directory corresponding to number ' . $clo[MAKEZIP]);
-    }
+			mkzip($srcdir, $zipfile, true);
+		} else {
+			output('Can not create dir: ' . $zipdir, true);
+		}
+	} else {
+		output('There is no directory corresponding to number ' . $clo[MAKEZIP], true);
+	}
 } elseif (isset($clo[MAKEFCL]) || isset($clo[EXTRFCL]) || isset($clo[LISTFCL])) {
-    $fcl_file = strtopath(FCLDIR) . $basename . '.fcl';
+	$fclfile = getConcatPath(FCLDIR, $basename . '.fcl');
 
-    if (isset($clo[MAKEFCL])) {
-        chkdir(FCLDIR);
+	if (isset($clo[MAKEFCL])) {
+		chkdir(FCLDIR);
 
-        out(runfcl('make', $fcl_file, '-f' . get_fclignore(FCLIGNORE)));
-        out(runhideg($fcl_file));
-    } elseif (isset($clo[EXTRFCL]) || isset($clo[LISTFCL])) {
-        if (is_file($fcl_file . '.g')) {
-            out(runhideg($fcl_file . '.g'));
+		output(fcl('make', $fclfile, '-f' . fclignore(FCLIGNORE)));
+		output(hideg($fclfile));
+	} elseif (isset($clo[EXTRFCL]) || isset($clo[LISTFCL])) {
+		if (is_file($fclfile . '.g')) {
+			output(hideg($fclfile . '.g'));
 
-            if (is_file($fcl_file)) {
-                if (isset($clo[EXTRFCL])) {
-                    out(runfcl('extr', $fcl_file, '-f'));
-                }
+			if (is_file($fclfile)) {
+				if (isset($clo[EXTRFCL])) {
+					output(fcl('extr', $fclfile, '-f'));
+				}
 
-                if (isset($clo[LISTFCL])) {
-                    out(runfcl('list', $fcl_file));
-                }
-            } else {
-                error('file "' . $fcl_file . '" is missing!');
-            }
-        } else {
-            error('file "' . $fcl_file . '.g' . '" is missing!');
-        }
-    }
+				if (isset($clo[LISTFCL])) {
+					output(fcl('list', $fclfile));
+				}
+			} else {
+				output('file "' . $fclfile . '" is missing!', true);
+			}
+		} else {
+			output('file "' . $fclfile . '.g' . '" is missing!', true);
+		}
+	}
 
-    if (is_file($fcl_file)) {
-        unlink($fcl_file);
-    }
+	if (is_file($fclfile)) {
+		unlink($fclfile);
+	}
 } else {
-    include '_pak/help.php';
+	include '_pak/help.php';
 
-    out('Numbers:');
+	output('Numbers:');
 
-    foreach (get_enumerated() as $idx => $name) {
-        out('[' . $idx . '] - ' . $name);
-    }
+	foreach (numbered() as $idx => $name) {
+		output('[' . $idx . '] - ' . $name);
+	}
 }
 
 exit(0);
