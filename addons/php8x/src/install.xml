@@ -13,14 +13,11 @@
 
 	<file path="system/engine/action.php">
 		<operation error="log">
-  			<search>
-				<![CDATA[$file = DIR_APPLICATION . 'controller/' . $this->route . '.php';]]>
+			<search>
+				<![CDATA[preg_replace('/[^a-zA-Z0-9]/', '', $this->route)]]>
 			</search>
-			<add position="before">
-				<![CDATA[
-		if (!$this->route) {
-			return new \Exception('Error: Could not call ' . $this->route . '/' . $this->method . '!');
-		}]]>
+			<add position="replace">
+				<![CDATA[preg_replace('/[^a-zA-Z0-9]/', '', ($this->route ?? ''))]]>
 			</add>
 		</operation>
 	</file>
