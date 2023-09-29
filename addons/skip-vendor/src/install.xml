@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<insertfile>_inc/summary.txt</insertfile>
+-->
+
+<modification>
+	<name>!ocmod.space: <insertvar>MODCODE</insertvar></name>
+	<code><insertvar>MODFILE</insertvar></code>
+	<version><insertvar>MODVERS</insertvar></version>
+	<author><insertvar>AUTHOR</insertvar></author>
+	<link><insertvar>XMLLINK</insertvar></link>
+
+	<file path="system/startup.php">
+		<operation error="log">
+  			<search>
+				<![CDATA[is_file(DIR_SYSTEM . '../../vendor/autoload.php')]]>
+			</search>
+			<add position="replace">
+				<![CDATA[0 && is_file(DIR_SYSTEM . '../../vendor/autoload.php')]]>
+			</add>
+		</operation>
+	</file>
+</modification>
