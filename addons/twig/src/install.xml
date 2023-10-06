@@ -11,35 +11,24 @@
 	<author><insertvar>AUTHOR</insertvar></author>
 	<link><insertvar>XMLLINK</insertvar></link>
 
-	<file path="admin/controller/marketplace/modification.php" error="skip">
-		<operation error="log">
-			<search>
-				<![CDATA[$xml[] = file_get_contents(DIR_SYSTEM . 'modification.xml');]]>
-			</search>
-			<add position="before"><![CDATA[
-				/// <<< Fix TWIG
-				if (VERSION === '3.0.3.5' || VERSION === '3.0.3.6') {
-					$xml[] = file_get_contents(DIR_SYSTEM.'modification_fixed.xml');
-				} else
-				/// Fix TWIG >>>
-			]]></add>
-		</operation>
-	</file>
-
 	<file path="system/library/template/twig.php" error="skip">
 		<operation error="log">
 			<search><![CDATA[
+				$loader = new \Twig\Loader\ArrayLoader(array($filename . '.twig' => $code));]]></search>
+			<add position="replace"><![CDATA[
+			/// << <insertvar>MODCODE</insertvar>
+			if (VERSION == '3.0.3.5' || VERSION == '3.0.3.6') {
+				$loader_array = new \Twig_Loader_Array(array($filename . '.twig' => $code));
+				$loader_filesystem = new \Twig_Loader_Filesystem(DIR_TEMPLATE);
+				$loader = new \Twig\Loader\ChainLoader(array($loader_array, $loader_filesystem));
+			} elseif (VERSION == '3.0.3.7' || VERSION == '3.0.3.8' || VERSION == '3.0.x.x') {
+				$loader_array = new \Twig\Loader\ArrayLoader(array($filename . '.twig' => $code));
+				$loader_filesystem = new \Twig\Loader\FilesystemLoader(DIR_TEMPLATE);
+				$loader = new \Twig\Loader\ChainLoader(array($loader_array, $loader_filesystem));
+			} else {
 				$loader = new \Twig\Loader\ArrayLoader(array($filename . '.twig' => $code));
-			]]></search>
-			<add position="before"><![CDATA[
-				/// <<< Fix TWIG
-				if (VERSION === '3.0.3.5' || VERSION === '3.0.3.6') {
-					$loader_array = new \Twig_Loader_Array(array($filename . '.twig' => $code));
-					$loader_filesystem = new \Twig_Loader_Filesystem(DIR_TEMPLATE);
-					$loader = new \Twig\Loader\ChainLoader(array($loader_array, $loader_filesystem));
-				} else
-				/// Fix TWIG >>>
-			]]></add>
+			}
+			/// >> <insertvar>MODCODE</insertvar>]]></add>
 		</operation>
 	</file>
 
