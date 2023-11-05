@@ -18,93 +18,11 @@
 		</operation>
 
 		<operation error="log">
-  			<search><![CDATA[public function __construct($expire = 3600)]]></search>
-			<add position="replace">
-				<![CDATA[/// << <insertvar>MODCODE</insertvar>
-	public function __construct(int $expire = 3600) {
-		$this->expire = $expire;
-	}
-	/// >> <insertvar>MODCODE</insertvar>
-
-	public function __construct_old($expire = 3600)]]>
+  			<search><![CDATA[if (file_exists($file))]]></search>
+			<add position="before">
+				<![CDATA[
+					if (!file_exists($file)) clearstatcache(false, $file);  /// <insertvar>MODCODE</insertvar>]]>
 			</add>
-		</operation>
-
-		<operation error="log">
-			<search><![CDATA[public function get($key)]]></search>
-			<add position="replace">
-				<![CDATA[/// << <insertvar>MODCODE</insertvar>
-	public function get(string $key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
-
-		if ($files) {
-			return json_decode(file_get_contents($files[0]), true);
-		} else {
-			return [];
-		}
-	}
-	/// >> <insertvar>MODCODE</insertvar>
-
-	public function get_old($key)]]></add>
-		</operation>
-
-		<operation error="log">
-			<search>
-				<![CDATA[public function set($key, $value)]]>
-			</search>
-			<add position="replace">
-				<![CDATA[/// << <insertvar>MODCODE</insertvar>
-	public function set(string $key, $value, int $expire = 0) {
-		$this->delete($key);
-
-		if (!$expire) {
-			$expire = $this->expire;
-		}
-
-		file_put_contents(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.' . (time() + $expire), json_encode($value));
-	}
-	/// >> <insertvar>MODCODE</insertvar>
-
-	public function set_old($key, $value)]]></add>
-		</operation>
-
-		<operation error="log">
-			<search><![CDATA[public function delete($key)]]></search>
-			<add position="replace">
-				<![CDATA[/// << <insertvar>MODCODE</insertvar>
-	public function delete(string $key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
-
-		if ($files) {
-			foreach ($files as $file) {
-				if (!@unlink($file)) {
-					clearstatcache(false, $file);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Destructor
-	 */
-	public function __destruct() {
-		$files = glob(DIR_CACHE . 'cache.*');
-
-		if ($files && rand(1, 100) == 1) {
-			foreach ($files as $file) {
-				$time = substr(strrchr($file, '.'), 1);
-
-				if ($time < time()) {
-					if (!@unlink($file)) {
-						clearstatcache(false, $file);
-					}
-				}
-			}
-		}
-	}
-	/// >> <insertvar>MODCODE</insertvar>
-
-	public function delete_old($key)]]></add>
 		</operation>
 	</file>
 </modification>
