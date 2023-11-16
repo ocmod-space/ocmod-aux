@@ -1,4 +1,4 @@
-#  OC Fix|PHP8x
+#  OC Fixes|PHP8x
 
 ## Description
 Fix errors and warning appeared on PHP 8.1+:

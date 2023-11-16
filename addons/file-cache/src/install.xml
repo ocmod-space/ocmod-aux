@@ -18,10 +18,16 @@
 		</operation>
 
 		<operation error="log">
-  			<search><![CDATA[if (file_exists($file))]]></search>
+			<search><![CDATA[if (file_exists($file))]]></search>
 			<add position="before">
 				<![CDATA[
 					if (!file_exists($file)) clearstatcache(false, $file);  /// <insertvar>MODCODE</insertvar>]]>
+			</add>
+		</operation>
+		<operation error="log">
+			<search><![CDATA[$handle = fopen($files[0], 'r');]]></search>
+			<add position="before">
+				<![CDATA[			if (!file_exists($files[0])) clearstatcache(false, $files[0]);  /// <insertvar>MODCODE</insertvar>]]>
 			</add>
 		</operation>
 	</file>

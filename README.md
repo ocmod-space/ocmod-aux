@@ -1,3 +1,1 @@
-# Addons
-
-Various OC fixes.
+Various OpenCart fixes.
