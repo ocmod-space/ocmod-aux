@@ -1,7 +1,10 @@
 _inc
 doc
 pic
+src
+zip
 *.code-workspace
 *.fclignore
 *.pwd
-pakdef.php
+ocmodw.inc
+ocmodw.ini.php

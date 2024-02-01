@@ -1,8 +1,9 @@
 .git
 _fcl
-_pak
-zip
 .gitignore
 .php-cs-fixer.php_cs
+ocmodw.inc
+ocmodw.php
 hideg.pwd
-pakrun.php
+zip
+.optipage.code-workspace
