@@ -16,14 +16,14 @@
 			<search>
 				<![CDATA[$xml[] = file_get_contents(DIR_SYSTEM . 'modification.xml');]]>
 			</search>
-			<add position="replace"><![CDATA[/// <<< Fix TWIG Lite
+			<add position="replace"><![CDATA[/// << <insertvar>MODCODE</insertvar>
 			if (VERSION === '3.0.3.5' || VERSION === '3.0.3.6') {
 				$modification_fixed = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KCjxtb2RpZmljYXRpb24+CiAgPG5hbWU+TW9kaWZpY2F0aW9uIERlZmF1bHQ8L25hbWU+CiAgPGNvZGU+ZGVmYXVsdDwvY29kZT4KICA8dmVyc2lvbj4xLjE8L3ZlcnNpb24+CiAgPGF1dGhvcj5BbmRyaWkgQnVya2F0c2t5aSBha2EgdW5kZXJyPC9hdXRob3I+CiAgPGxpbms+aHR0cDovL3d3dy5vcGVuY2FydC5jb208L2xpbms+CgogIDxmaWxlIHBhdGg9InN5c3RlbS97ZW5naW5lLGxpYnJhcnl9L3thY3Rpb24sbG9hZGVyLGNvbmZpZyxsYW5ndWFnZX0qLnBocHxzeXN0ZW0vbGlicmFyeS90ZW1wbGF0ZS90ZW1wbGF0ZS5waHAiPgogICAgPG9wZXJhdGlvbj4KICAgICAgPHNlYXJjaCByZWdleD0idHJ1ZSI+PCFbQ0RBVEFbfihyZXF1aXJlfGluY2x1ZGUpKF9vbmNlKT9cKChbXildKyl+XV0+PC9zZWFyY2g+CiAgICAgIDxhZGQgcG9zaXRpb249InJlcGxhY2UiPgogICAgICAgIDwhW0NEQVRBWyQxJDIobW9kaWZpY2F0aW9uKCQzKV1dPgogICAgICA8L2FkZD4KICAgIDwvb3BlcmF0aW9uPgogIDwvZmlsZT4KCiAgPGZpbGUgcGF0aD0ic3lzdGVtL2xpYnJhcnkvdGVtcGxhdGUvdHdpZy5waHAiPgogICAgPG9wZXJhdGlvbj4KICAgICAgPHNlYXJjaD48IVtDREFUQVtpZiAoaXNfZmlsZSgkZmlsZSkpIHtdXT48L3NlYXJjaD4KICAgICAgPGFkZCBwb3NpdGlvbj0icmVwbGFjZSI+CiAgICAgICAgPCFbQ0RBVEFbaWYgKGRlZmluZWQoJ0RJUl9DQVRBTE9HJykgJiYgaXNfZmlsZShESVJfTU9ESUZJQ0FUSU9OIC4gJ2FkbWluL3ZpZXcvdGVtcGxhdGUvJyAuICRmaWxlbmFtZSAuICcudHdpZycpKSB7CiAgICAgICAgICAgICAgICAkY29kZSA9IGZpbGVfZ2V0X2NvbnRlbnRzKERJUl9NT0RJRklDQVRJT04gLiAnYWRtaW4vdmlldy90ZW1wbGF0ZS8nIC4gJGZpbGVuYW1lIC4gJy50d2lnJyk7CiAgICAgICAgICAgIH0gZWxzZWlmIChpc19maWxlKERJUl9NT0RJRklDQVRJT04gLiAnY2F0YWxvZy92aWV3L3RoZW1lLycgLiAkZmlsZW5hbWUgLiAnLnR3aWcnKSkgewogICAgICAgICAgICAgICAgJGNvZGUgPSBmaWxlX2dldF9jb250ZW50cyhESVJfTU9ESUZJQ0FUSU9OIC4gJ2NhdGFsb2cvdmlldy90aGVtZS8nIC4gJGZpbGVuYW1lIC4gJy50d2lnJyk7CiAgICAgICAgICAgIH0gZWxzZWlmIChpc19maWxlKCRmaWxlKSkge11dPgogICAgICA8L2FkZD4KICAgIDwvb3BlcmF0aW9uPgogIDwvZmlsZT4KCjwvbW9kaWZpY2F0aW9uPgo=';
 				$xml[] = base64_decode($modification_fixed, true);
 			} else {
 				$xml[] = file_get_contents(DIR_SYSTEM . 'modification.xml');
 			}
-			/// Fix TWIG Lite >>>]]></add>
+			/// >> <insertvar>MODCODE</insertvar>]]></add>
 		</operation>
 	</file>
 
