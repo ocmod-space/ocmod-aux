@@ -1,1 +1,1 @@
-Various OpenCart fixes.
+Various OpenCart auxilliaries and fixes.

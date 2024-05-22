@@ -1,4 +1,4 @@
-#   OCFix|Unlink Cache
+# aux/unlink_cache
 
 ## Description
 A fix for OpenCart 3.x that fixes PHP warning messages about language cache files like:

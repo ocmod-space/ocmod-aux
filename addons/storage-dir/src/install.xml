@@ -5,7 +5,7 @@
 -->
 
 <modification>
-	<name>!ocmod.space: <insertvar>MODCODE</insertvar></name>
+	<name>!<insertvar>MODCODE</insertvar></name>
 	<code><insertvar>MODFILE</insertvar></code>
 	<version><insertvar>MODVERS</insertvar></version>
 	<author><insertvar>AUTHOR</insertvar></author>
