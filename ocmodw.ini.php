@@ -1,7 +1,7 @@
 <?php
 
-define('MODVERS', '1.0.0');
-define('MODYEAR', '2019');
+define('VERSION', '1.0.0');
+define('YEAR', '2019');
 
 define('AUTHOR', 'Andrii Burkatskyi');
 define('EMAIL', 'ocmod.space@gmail.com');
@@ -11,4 +11,4 @@ define('OCMLINK', 'https://www.opencart.com/index.php?route=marketplace/extensio
 define('GITLINK', 'https://github.com/ocmod-space/ocmod-aux');
 define('XMLLINK', 'https://www.opencart.com/index.php?route=marketplace/extension&amp;filter_member=ocmod.space');
 
-define('LICLINK', 'https://github.com/ocmod-space/ocmod-aux/blob/main/LICENSE.txt');
+define('LICENSE', 'https://github.com/ocmod-space/ocmod-aux/blob/main/LICENSE.txt');
