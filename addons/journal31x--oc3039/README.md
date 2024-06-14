@@ -1,3 +1,3 @@
-# aux/journal31x__oc3039
+# Aux|Journal31x|OC3039
 
 ## Description

@@ -1,4 +1,4 @@
-# aux/currency_format
+# Aux|Currency Format
 
 ## Description
 ---
